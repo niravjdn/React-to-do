@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import "./App.css";
 import Todos from "./components/Todos";
 import Header from "./components/layout/header"
+import Footer from "./components/layout/footer"
 import AddToDo from "./components/AddToDo"
 import uuid from "uuid";
 import Axios from 'axios'
@@ -86,10 +87,11 @@ class App extends Component {
   render() {
     console.log(this.state.todos);
     return (
-      <div className="App">
+      <div className="main-container">
         <Header/>
         <AddToDo addToDo={this.addToDo}/>
         <Todos todos={this.state.todos} delTodo={this.delTodo} markComplete={this.markComplete} />
+        <Footer />
       </div>
     );
   }
