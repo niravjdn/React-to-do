@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
 var firebaseConfig = {
-    apiKey: "AIzaSyAlbPkbxtT8lxElF1oonnvEGfHcKuOjJGQ",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "todolist-fe81e.firebaseapp.com",
     databaseURL: "https://todolist-fe81e.firebaseio.com",
     projectId: "todolist-fe81e",
