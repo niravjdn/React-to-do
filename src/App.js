@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component } from "react"
 import "./App.css";
 import Todos from "./components/Todos";
 import Header from "./components/layout/header"
 import AddToDo from "./components/AddToDo"
+import uuid from "uuid";
 
 class App extends Component {
   state = {
@@ -38,12 +39,24 @@ class App extends Component {
       });
   }
   
+  addToDo = (title) => {
+    console.log(title);
+    const newtodo = {
+      id : uuid.v4(),
+      title,
+      completed : false
+    }
+    this.setState({
+      todos : [...this.state.todos, newtodo]
+    });
+  }
+
   render() {
     console.log(this.state.todos);
     return (
       <div className="App">
         <Header/>
-        <AddToDo/>
+        <AddToDo addToDo={this.addToDo}/>
         <Todos todos={this.state.todos} delTodo={this.delTodo} markComplete={this.markComplete} />
       </div>
     );

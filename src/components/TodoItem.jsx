@@ -24,7 +24,7 @@ export class TodoItem extends Component {
         const {id, title} = this.props.todo;
         return (
             <div >
-             <Card minWidth="100%">
+             <Card>
                  <CardContent   style={controls} display="flex">
              
                 <Checkbox 
