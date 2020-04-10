@@ -4,39 +4,63 @@ import Todos from "./components/Todos";
 import Header from "./components/layout/header"
 import AddToDo from "./components/AddToDo"
 import uuid from "uuid";
+import Axios from 'axios'
+import firebase from "./components/firebase"
+
 
 class App extends Component {
   state = {
-    todos: [
-      {
-        id: 1,
-        title: "Meeting with Boss",
-        completed: false
-      },
-      {
-        id: 2,
-        title: "Meeting with Boss",
-        completed: true
-      }
-    ]
+     todos :  []
+  }
+
+
+  componentDidMount(){
+    const markers = [];
+    const db = firebase.firestore();
+    const userRef = db.collection("todos").get().then(res => {
+      res.docs.forEach(doc => {
+        markers.push(doc.data());
+      });
+      
+      this.setState({todos : markers});
+    }); 
+    //this.setState({todos : userRef});
   }
 
   delTodo = (id) => {
     this.setState({
       todos : [...this.state.todos.filter( todo => todo.id != id)]
     });
+    const db = firebase.firestore();
+    db.collection('todos').where('id','==', id)
+    .get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+      });
+    });
   }
   
   markComplete = (id) => {
+    let target = null;
     this.setState(
        {todos : this.state.todos.map( (todo) => {
         if(todo.id === id){
           todo.completed = !todo.completed;
+          target = todo;
         }
-  
          return todo;
        })
       });
+
+      const db = firebase.firestore();
+      db.collection('todos').where('id','==', id)
+      .get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          db.collection("todos").doc(doc.id).update({completed: target.completed});
+        });
+      });
+      
+
   }
   
   addToDo = (title) => {
@@ -46,9 +70,17 @@ class App extends Component {
       title,
       completed : false
     }
+    let updatedList = [...this.state.todos, newtodo];
     this.setState({
-      todos : [...this.state.todos, newtodo]
+      todos : updatedList
     });
+
+    const db = firebase.firestore();
+    const userRef = db.collection("todos").add({
+      id : uuid.v4(),
+      title: title,
+      completed: false
+    });  
   }
 
   render() {
