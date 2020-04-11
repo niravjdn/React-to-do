@@ -21,7 +21,8 @@ export class TodoItem extends Component {
 
 
     render() {
-        const {id, title} = this.props.todo;
+        const {id, title, completed} = this.props.todo;
+        console.log(completed);
         return (
             <div >
              <Card>
@@ -31,6 +32,7 @@ export class TodoItem extends Component {
                 color="primary"
                 style={{flex : '1'}}
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
+                checked = {completed}
                 type="checkbox" onChange={this.props.markComplete.bind(this, id)} >
                     </Checkbox>
                     <p  style={this.getStyle()}>{title} </p>
